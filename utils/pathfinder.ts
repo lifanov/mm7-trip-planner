@@ -1,6 +1,6 @@
 
 import { Location, Day, Route, TravelStep, TripResult } from '../types';
-import { ROUTES } from '../constants';
+import { ROUTES, INN_COSTS } from '../constants';
 
 /**
  * Calculates the number of days to wait until the next available departure day.
@@ -24,7 +24,8 @@ export function findShortestPath(
   start: Location,
   end: Location,
   startDay: Day,
-  hasEvenmornMap: boolean
+  hasEvenmornMap: boolean,
+  stayAtInn: boolean
 ): TripResult | null {
   if (start === end) {
     return { steps: [], totalDays: 0, totalCost: 0 };
@@ -80,11 +81,16 @@ export function findShortestPath(
       const departureDay = (current.currentDay + waitTime) % 7 as Day;
       const arrivalDay = (departureDay + route.duration) % 7 as Day;
       
+      let innCost = 0;
+      if (stayAtInn && waitTime > 0) {
+        innCost = waitTime * 3 * (INN_COSTS[current.location] || 0);
+      }
+
       const nextState: State = {
         location: route.to,
         currentDay: arrivalDay,
         totalDays: current.totalDays + waitTime + route.duration,
-        totalCost: current.totalCost + route.cost,
+        totalCost: current.totalCost + route.cost + innCost,
         steps: [
           ...current.steps,
           {
@@ -94,8 +100,9 @@ export function findShortestPath(
             departureDay,
             arrivalDay,
             duration: route.duration,
-            cost: route.cost,
-            waitTime
+            cost: route.cost + innCost, // Combined cost for the step
+            waitTime,
+            innCost // Track inn cost separately for display
           }
         ]
       };

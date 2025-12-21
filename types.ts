@@ -45,6 +45,7 @@ export interface TravelStep {
   duration: number;
   cost: number;
   waitTime: number;
+  innCost?: number;
 }
 
 export interface TripResult {
