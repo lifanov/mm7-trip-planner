@@ -1,0 +1,5 @@
+{
+  "name": "Might & Magic VII Travel Planner",
+  "description": "A specialized transit calculator for Might and Magic VII, calculating the fastest routes between regions using coach and boat schedules, with support for the Evenmorn Islands quest map.",
+  "requestFramePermissions": []
+}
