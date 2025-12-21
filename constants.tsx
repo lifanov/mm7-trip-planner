@@ -5,6 +5,19 @@ export const DAYS_OF_WEEK = [
   "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
 ];
 
+// Price per 8 hours
+export const INN_COSTS: Record<Location, number> = {
+  [Location.Harmondale]: 2,
+  [Location.Erathia]: 14,
+  [Location.TulareanForest]: 14,
+  [Location.Avlee]: 40,
+  [Location.Tatalia]: 40,
+  [Location.Deyja]: 19,
+  [Location.BracadaDesert]: 19,
+  [Location.EvenmornIslands]: 3,
+  [Location.MountNighon]: 360
+};
+
 export const ROUTES: Route[] = [
   // Harmondale
   { from: Location.Harmondale, to: Location.Erathia, type: TransportType.Coach, days: [Day.Monday, Day.Wednesday, Day.Friday], duration: 2, cost: 50 },

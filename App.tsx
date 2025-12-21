@@ -11,9 +11,9 @@ import {
   Ship, 
   Search,
   ChevronRight,
-  Info
+  Info,
+  Bed
 } from 'lucide-react';
-// Added TransportType to the import list from './types' to fix errors on lines 178 and 191
 import { Location, Day, TripResult, TransportType } from './types';
 import { DAYS_OF_WEEK } from './constants';
 import { findShortestPath } from './utils/pathfinder';
@@ -23,12 +23,13 @@ const App: React.FC = () => {
   const [targetLoc, setTargetLoc] = useState<Location>(Location.EvenmornIslands);
   const [currentDay, setCurrentDay] = useState<Day>(Day.Monday);
   const [hasMap, setHasMap] = useState<boolean>(false);
+  const [stayAtInn, setStayAtInn] = useState<boolean>(false);
 
   const locations = Object.values(Location);
 
   const result: TripResult | null = useMemo(() => {
-    return findShortestPath(startLoc, targetLoc, currentDay, hasMap);
-  }, [startLoc, targetLoc, currentDay, hasMap]);
+    return findShortestPath(startLoc, targetLoc, currentDay, hasMap, stayAtInn);
+  }, [startLoc, targetLoc, currentDay, hasMap, stayAtInn]);
 
   return (
     <div className="min-h-screen parchment flex flex-col items-center p-4 md:p-8">
@@ -104,6 +105,25 @@ const App: React.FC = () => {
                 </div>
               </div>
 
+               {/* Stay at Inn Checkbox */}
+               <div className="pt-2">
+                <label className="flex items-center gap-3 cursor-pointer group">
+                  <div className="relative">
+                    <input
+                      type="checkbox"
+                      checked={stayAtInn}
+                      onChange={(e) => setStayAtInn(e.target.checked)}
+                      className="sr-only"
+                    />
+                    <div className={`w-10 h-5 rounded-full transition-colors ${stayAtInn ? 'bg-amber-600' : 'bg-slate-700'}`} />
+                    <div className={`absolute top-1 left-1 w-3 h-3 rounded-full bg-white transition-transform ${stayAtInn ? 'translate-x-5' : ''}`} />
+                  </div>
+                  <span className="text-sm font-bold text-slate-300 group-hover:text-amber-400 flex items-center gap-2">
+                    <Bed className="w-4 h-4" /> Stay at the Inn
+                  </span>
+                </label>
+              </div>
+
               {/* Evenmorn Map Checkbox */}
               <div className="pt-2">
                 <label className="flex items-center gap-3 cursor-pointer group">
@@ -176,7 +196,6 @@ const App: React.FC = () => {
                         
                         {/* Timeline Dot */}
                         <div className="absolute left-0 top-1.5 w-6 h-6 rounded-full bg-slate-800 border-2 border-amber-500 flex items-center justify-center z-10">
-                          {/* Fixed: step.type comparison with TransportType now works because TransportType is imported */}
                           {step.type === TransportType.Coach ? <Bus className="w-3 h-3 text-amber-500" /> : <Ship className="w-3 h-3 text-amber-500" />}
                         </div>
 
@@ -190,7 +209,6 @@ const App: React.FC = () => {
                               </div>
                               <p className="text-sm text-slate-400 flex items-center gap-4">
                                 <span className="flex items-center gap-1">
-                                  {/* Fixed: step.type comparison with TransportType now works because TransportType is imported */}
                                   {step.type === TransportType.Coach ? 'Stable' : 'Docks'}
                                 </span>
                                 <span className="flex items-center gap-1">
@@ -204,8 +222,11 @@ const App: React.FC = () => {
 
                             <div className="text-right">
                               {step.waitTime > 0 && (
-                                <div className="bg-red-950/30 text-red-400 text-[10px] px-2 py-0.5 rounded border border-red-900/30 mb-1 inline-block uppercase font-bold">
-                                  Wait {step.waitTime} {step.waitTime === 1 ? 'Day' : 'Days'}
+                                <div className="flex flex-col items-end">
+                                  <div className="bg-red-950/30 text-red-400 text-[10px] px-2 py-0.5 rounded border border-red-900/30 mb-1 inline-block uppercase font-bold">
+                                    Wait {step.waitTime} {step.waitTime === 1 ? 'Day' : 'Days'}
+                                    {step.innCost && step.innCost > 0 ? ` (+${step.innCost} Gold)` : ''}
+                                  </div>
                                 </div>
                               )}
                               <p className="text-xs font-bold text-slate-500 uppercase tracking-tighter">
