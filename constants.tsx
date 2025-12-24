@@ -15,13 +15,18 @@ export const INN_COSTS: Record<Location, number> = {
   [Location.Deyja]: 19,
   [Location.BracadaDesert]: 19,
   [Location.EvenmornIslands]: 3,
-  [Location.MountNighon]: 360
+  [Location.MountNighon]: 360,
+  [Location.Arena]: 0
 };
 
 export const ROUTES: Route[] = [
   // Harmondale
   { from: Location.Harmondale, to: Location.Erathia, type: TransportType.Coach, days: [Day.Monday, Day.Wednesday, Day.Friday], duration: 2, cost: 50 },
   { from: Location.Harmondale, to: Location.TulareanForest, type: TransportType.Coach, days: [Day.Tuesday, Day.Thursday, Day.Saturday], duration: 2, cost: 50 },
+  { from: Location.Harmondale, to: Location.Arena, type: TransportType.Coach, days: [Day.Sunday], duration: 1, cost: 50 },
+
+  // Arena
+  { from: Location.Arena, to: Location.Harmondale, type: TransportType.Coach, days: [Day.Monday], duration: 1, cost: 50 },
 
   // Erathia Stables
   { from: Location.Erathia, to: Location.Harmondale, type: TransportType.Coach, days: [0,1,2,3,4,5,6], duration: 2, cost: 50 },
