@@ -83,7 +83,7 @@ export function findShortestPath(
       
       let innCost = 0;
       if (stayAtInn && waitTime > 0) {
-        innCost = waitTime * 3 * (INN_COSTS[current.location] || 0);
+        innCost = waitTime * (INN_COSTS[current.location] || 0);
       }
 
       const nextState: State = {
