@@ -5,7 +5,7 @@ export const DAYS_OF_WEEK = [
   "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
 ];
 
-// Price per 8 hours
+// Price per day
 export const INN_COSTS: Record<Location, number> = {
   [Location.Harmondale]: 2,
   [Location.Erathia]: 14,
