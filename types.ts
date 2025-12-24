@@ -8,7 +8,9 @@ export enum Location {
   Deyja = "Deyja",
   BracadaDesert = "Bracada Desert",
   EvenmornIslands = "Evenmorn Islands",
-  MountNighon = "Mount Nighon"
+  MountNighon = "Mount Nighon",
+  Arena = "Arena",
+  BarrowDowns = "Barrow Downs"
 }
 
 export enum Day {
@@ -23,7 +25,8 @@ export enum Day {
 
 export enum TransportType {
   Coach = "Coach",
-  Boat = "Boat"
+  Boat = "Boat",
+  Walk = "Walk"
 }
 
 export interface Route {
@@ -34,6 +37,7 @@ export interface Route {
   duration: number; // in days
   cost: number; // in gold
   requiresMap?: boolean;
+  details?: string;
 }
 
 export interface TravelStep {
@@ -46,6 +50,7 @@ export interface TravelStep {
   cost: number;
   waitTime: number;
   innCost?: number;
+  details?: string;
 }
 
 export interface TripResult {

@@ -25,7 +25,8 @@ export function findShortestPath(
   end: Location,
   startDay: Day,
   hasEvenmornMap: boolean,
-  stayAtInn: boolean
+  stayAtInn: boolean,
+  walkEnabled: boolean = false
 ): TripResult | null {
   if (start === end) {
     return { steps: [], totalDays: 0, totalCost: 0 };
@@ -73,7 +74,8 @@ export function findShortestPath(
     // Explore routes
     const availableRoutes = ROUTES.filter(r => 
       r.from === current.location && 
-      (!r.requiresMap || hasEvenmornMap)
+      (!r.requiresMap || hasEvenmornMap) &&
+      (walkEnabled || r.type !== 'Walk')
     );
 
     for (const route of availableRoutes) {
@@ -83,7 +85,7 @@ export function findShortestPath(
       
       let innCost = 0;
       if (stayAtInn && waitTime > 0) {
-        innCost = waitTime * 3 * (INN_COSTS[current.location] || 0);
+        innCost = waitTime * (INN_COSTS[current.location] || 0);
       }
 
       const nextState: State = {
@@ -102,7 +104,8 @@ export function findShortestPath(
             duration: route.duration,
             cost: route.cost + innCost, // Combined cost for the step
             waitTime,
-            innCost // Track inn cost separately for display
+            innCost, // Track inn cost separately for display
+            details: route.details
           }
         ]
       };
