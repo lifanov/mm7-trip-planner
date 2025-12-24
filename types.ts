@@ -8,7 +8,8 @@ export enum Location {
   Deyja = "Deyja",
   BracadaDesert = "Bracada Desert",
   EvenmornIslands = "Evenmorn Islands",
-  MountNighon = "Mount Nighon"
+  MountNighon = "Mount Nighon",
+  Arena = "Arena"
 }
 
 export enum Day {
