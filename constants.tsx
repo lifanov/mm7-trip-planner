@@ -16,10 +16,65 @@ export const INN_COSTS: Record<Location, number> = {
   [Location.BracadaDesert]: 19,
   [Location.EvenmornIslands]: 3,
   [Location.MountNighon]: 360,
-  [Location.Arena]: 0
+  [Location.Arena]: 0,
+  [Location.BarrowDowns]: 0,
+  [Location.StoneCity]: 0,
+  [Location.ThunderfistTunnels]: 0,
+  [Location.LandOfTheGiants]: 0
 };
 
 export const ROUTES: Route[] = [
+  // --- Walking Routes (Available Every Day) ---
+
+  // Avlee
+  { from: Location.Avlee, to: Location.TulareanForest, type: TransportType.Walk, days: DAYS_OF_WEEK.map((_, i) => i as Day), duration: 5, cost: 0 },
+
+  // Barrow Downs
+  { from: Location.BarrowDowns, to: Location.Harmondale, type: TransportType.Walk, days: DAYS_OF_WEEK.map((_, i) => i as Day), duration: 5, cost: 0 }, // North
+  { from: Location.BarrowDowns, to: Location.BracadaDesert, type: TransportType.Walk, days: DAYS_OF_WEEK.map((_, i) => i as Day), duration: 7, cost: 0 }, // South
+  { from: Location.BarrowDowns, to: Location.TulareanForest, type: TransportType.Walk, days: DAYS_OF_WEEK.map((_, i) => i as Day), duration: 5, cost: 0 }, // West
+
+  // Barrow Downs -> Stone City -> Thunderfist -> Nighon (0 Days)
+  { from: Location.BarrowDowns, to: Location.StoneCity, type: TransportType.Walk, days: DAYS_OF_WEEK.map((_, i) => i as Day), duration: 0, cost: 0 },
+  { from: Location.StoneCity, to: Location.BarrowDowns, type: TransportType.Walk, days: DAYS_OF_WEEK.map((_, i) => i as Day), duration: 0, cost: 0 },
+  { from: Location.StoneCity, to: Location.ThunderfistTunnels, type: TransportType.Walk, days: DAYS_OF_WEEK.map((_, i) => i as Day), duration: 0, cost: 0 },
+  { from: Location.ThunderfistTunnels, to: Location.StoneCity, type: TransportType.Walk, days: DAYS_OF_WEEK.map((_, i) => i as Day), duration: 0, cost: 0 },
+  { from: Location.ThunderfistTunnels, to: Location.MountNighon, type: TransportType.Walk, days: DAYS_OF_WEEK.map((_, i) => i as Day), duration: 0, cost: 0 },
+  { from: Location.MountNighon, to: Location.ThunderfistTunnels, type: TransportType.Walk, days: DAYS_OF_WEEK.map((_, i) => i as Day), duration: 0, cost: 0 },
+
+  // Bracada Desert
+  { from: Location.BracadaDesert, to: Location.Erathia, type: TransportType.Walk, days: DAYS_OF_WEEK.map((_, i) => i as Day), duration: 5, cost: 0 }, // North
+  { from: Location.BracadaDesert, to: Location.BarrowDowns, type: TransportType.Walk, days: DAYS_OF_WEEK.map((_, i) => i as Day), duration: 5, cost: 0 }, // East
+
+  // Deyja
+  { from: Location.Deyja, to: Location.TulareanForest, type: TransportType.Walk, days: DAYS_OF_WEEK.map((_, i) => i as Day), duration: 5, cost: 0 }, // East & North (North is 7, East is 5)
+  { from: Location.Deyja, to: Location.Erathia, type: TransportType.Walk, days: DAYS_OF_WEEK.map((_, i) => i as Day), duration: 5, cost: 0 }, // South
+
+  // Erathia
+  { from: Location.Erathia, to: Location.Deyja, type: TransportType.Walk, days: DAYS_OF_WEEK.map((_, i) => i as Day), duration: 5, cost: 0 }, // North
+  { from: Location.Erathia, to: Location.BracadaDesert, type: TransportType.Walk, days: DAYS_OF_WEEK.map((_, i) => i as Day), duration: 5, cost: 0 }, // South
+  { from: Location.Erathia, to: Location.Harmondale, type: TransportType.Walk, days: DAYS_OF_WEEK.map((_, i) => i as Day), duration: 5, cost: 0 }, // East
+  { from: Location.Erathia, to: Location.Tatalia, type: TransportType.Walk, days: DAYS_OF_WEEK.map((_, i) => i as Day), duration: 5, cost: 0 }, // West
+
+  // Harmondale
+  { from: Location.Harmondale, to: Location.TulareanForest, type: TransportType.Walk, days: DAYS_OF_WEEK.map((_, i) => i as Day), duration: 5, cost: 0 }, // North
+  { from: Location.Harmondale, to: Location.BarrowDowns, type: TransportType.Walk, days: DAYS_OF_WEEK.map((_, i) => i as Day), duration: 5, cost: 0 }, // South
+  { from: Location.Harmondale, to: Location.Erathia, type: TransportType.Walk, days: DAYS_OF_WEEK.map((_, i) => i as Day), duration: 5, cost: 0 }, // West
+
+  // Teleporter Routes
+  { from: Location.LandOfTheGiants, to: Location.Harmondale, type: TransportType.Walk, days: DAYS_OF_WEEK.map((_, i) => i as Day), duration: 0, cost: 0 },
+  { from: Location.Harmondale, to: Location.LandOfTheGiants, type: TransportType.Walk, days: DAYS_OF_WEEK.map((_, i) => i as Day), duration: 0, cost: 0, requiresTeleporter: true },
+
+  // Tatalia
+  { from: Location.Tatalia, to: Location.Erathia, type: TransportType.Walk, days: DAYS_OF_WEEK.map((_, i) => i as Day), duration: 5, cost: 0 }, // East
+
+  // Tularean Forest
+  { from: Location.TulareanForest, to: Location.Avlee, type: TransportType.Walk, days: DAYS_OF_WEEK.map((_, i) => i as Day), duration: 5, cost: 0 }, // North
+  { from: Location.TulareanForest, to: Location.Harmondale, type: TransportType.Walk, days: DAYS_OF_WEEK.map((_, i) => i as Day), duration: 5, cost: 0 }, // South
+  { from: Location.TulareanForest, to: Location.Deyja, type: TransportType.Walk, days: DAYS_OF_WEEK.map((_, i) => i as Day), duration: 5, cost: 0 }, // West
+
+  // --- Coach & Boat Routes ---
+
   // Harmondale - JVC Corral - 50GP
   { from: Location.Harmondale, to: Location.Erathia, type: TransportType.Coach, days: [Day.Monday, Day.Wednesday, Day.Friday], duration: 2, cost: 50 },
   { from: Location.Harmondale, to: Location.TulareanForest, type: TransportType.Coach, days: [Day.Tuesday, Day.Thursday, Day.Saturday], duration: 2, cost: 50 },
@@ -31,8 +86,10 @@ export const ROUTES: Route[] = [
   { from: Location.TulareanForest, to: Location.Harmondale, type: TransportType.Coach, days: [Day.Tuesday, Day.Thursday], duration: 2, cost: 75 },
 
   // Tularean Forest - Ship Sea Sprite - 100GP
-  { from: Location.TulareanForest, to: Location.BracadaDesert, type: TransportType.Boat, days: [Day.Monday], duration: 6, cost: 100 },
+  { from: Location.TulareanForest, to: Location.BracadaDesert, type: TransportType.Boat, days: [Day.Monday, Day.Wednesday], duration: 6, cost: 100 },
   { from: Location.TulareanForest, to: Location.Avlee, type: TransportType.Boat, days: [Day.Tuesday, Day.Thursday, Day.Saturday], duration: 3, cost: 100 },
+  { from: Location.TulareanForest, to: Location.EvenmornIslands, type: TransportType.Boat, days: [Day.Sunday], duration: 7, cost: 100, requiresMap: true },
+
 
   // Bracada Desert - Crystal Caravans - 106GP
   { from: Location.BracadaDesert, to: Location.Erathia, type: TransportType.Coach, days: [Day.Monday, Day.Wednesday, Day.Friday, Day.Sunday], duration: 3, cost: 106 },
@@ -42,6 +99,8 @@ export const ROUTES: Route[] = [
   { from: Location.BracadaDesert, to: Location.Tatalia, type: TransportType.Boat, days: [Day.Monday, Day.Wednesday, Day.Friday], duration: 4, cost: 212 },
   { from: Location.BracadaDesert, to: Location.TulareanForest, type: TransportType.Boat, days: [Day.Saturday], duration: 6, cost: 212 },
   { from: Location.BracadaDesert, to: Location.Erathia, type: TransportType.Boat, days: [Day.Sunday], duration: 6, cost: 212 },
+  { from: Location.BracadaDesert, to: Location.EvenmornIslands, type: TransportType.Boat, days: [Day.Tuesday, Day.Thursday], duration: 1, cost: 212, requiresMap: true },
+
 
   // Tatalia - Dry Saddles - 225GP
   { from: Location.Tatalia, to: Location.Erathia, type: TransportType.Coach, days: [Day.Tuesday, Day.Thursday, Day.Saturday], duration: 2, cost: 225 },
@@ -50,6 +109,9 @@ export const ROUTES: Route[] = [
   { from: Location.Tatalia, to: Location.BracadaDesert, type: TransportType.Boat, days: [Day.Monday], duration: 4, cost: 225 },
   { from: Location.Tatalia, to: Location.Avlee, type: TransportType.Boat, days: [Day.Friday], duration: 5, cost: 225 },
   { from: Location.Tatalia, to: Location.EvenmornIslands, type: TransportType.Boat, days: [Day.Sunday], duration: 5, cost: 225, requiresMap: true },
+  { from: Location.Tatalia, to: Location.BracadaDesert, type: TransportType.Boat, days: [Day.Wednesday], duration: 4, cost: 225 },
+  { from: Location.Tatalia, to: Location.Erathia, type: TransportType.Boat, days: [Day.Tuesday, Day.Thursday, Day.Saturday], duration: 2, cost: 225 },
+
 
   // Erathia - Royal Steeds - 75GP
   { from: Location.Erathia, to: Location.Tatalia, type: TransportType.Coach, days: [Day.Monday, Day.Wednesday, Day.Friday], duration: 2, cost: 75 },
@@ -61,6 +123,8 @@ export const ROUTES: Route[] = [
   { from: Location.Erathia, to: Location.Avlee, type: TransportType.Boat, days: [Day.Monday, Day.Friday], duration: 4, cost: 100 },
   { from: Location.Erathia, to: Location.Tatalia, type: TransportType.Boat, days: [Day.Tuesday, Day.Thursday, Day.Saturday], duration: 2, cost: 100 },
   { from: Location.Erathia, to: Location.BracadaDesert, type: TransportType.Boat, days: [Day.Wednesday], duration: 6, cost: 100 },
+  { from: Location.Erathia, to: Location.EvenmornIslands, type: TransportType.Boat, days: [Day.Sunday], duration: 7, cost: 100, requiresMap: true },
+
 
   // Deyja - Faithful Steeds - 118GP
   { from: Location.Deyja, to: Location.Erathia, type: TransportType.Coach, days: [Day.Monday, Day.Wednesday, Day.Friday], duration: 3, cost: 118 },
@@ -72,9 +136,11 @@ export const ROUTES: Route[] = [
 
   // Avlee - Ship Wind Runner - 237GP
   { from: Location.Avlee, to: Location.Erathia, type: TransportType.Boat, days: [Day.Tuesday], duration: 4, cost: 237 },
-  { from: Location.Avlee, to: Location.Erathia, type: TransportType.Boat, days: [Day.Sunday], duration: 3, cost: 237 },
   { from: Location.Avlee, to: Location.TulareanForest, type: TransportType.Boat, days: [Day.Wednesday, Day.Friday], duration: 3, cost: 237 },
-  { from: Location.Avlee, to: Location.Tatalia, type: TransportType.Boat, days: [Day.Thursday], duration: 5, cost: 237 },
+  { from: Location.Avlee, to: Location.TulareanForest, type: TransportType.Boat, days: [Day.Monday], duration: 3, cost: 237 },
+  { from: Location.Avlee, to: Location.Erathia, type: TransportType.Boat, days: [Day.Thursday], duration: 5, cost: 237 },
+  { from: Location.Avlee, to: Location.Erathia, type: TransportType.Boat, days: [Day.Saturday], duration: 4, cost: 237 },
+
 
   // Evenmorn Islands - Ship Sacred Sails - 500GP
   { from: Location.EvenmornIslands, to: Location.Tatalia, type: TransportType.Boat, days: [Day.Monday, Day.Wednesday, Day.Friday], duration: 4, cost: 500 },
