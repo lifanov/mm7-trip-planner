@@ -20,8 +20,19 @@ export const INN_COSTS: Record<Location, number> = {
   [Location.BarrowDowns]: 0,
   [Location.StoneCity]: 0,
   [Location.ThunderfistTunnels]: 0,
-  [Location.LandOfTheGiants]: 0
+  [Location.LandOfTheGiants]: 0,
+  [Location.Celeste]: 19,
+  [Location.ThePit]: 19
 };
+
+export const TOWN_PORTAL_LOCATIONS: Location[] = [
+  Location.Harmondale,
+  Location.Erathia,
+  Location.TulareanForest,
+  Location.MountNighon,
+  Location.Celeste,
+  Location.ThePit
+];
 
 export const ROUTES: Route[] = [
   // --- Walking Routes (Available Every Day) ---
@@ -45,10 +56,14 @@ export const ROUTES: Route[] = [
   // Bracada Desert
   { from: Location.BracadaDesert, to: Location.Erathia, type: TransportType.Walk, days: DAYS_OF_WEEK.map((_, i) => i as Day), duration: 5, cost: 0 }, // North
   { from: Location.BracadaDesert, to: Location.BarrowDowns, type: TransportType.Walk, days: DAYS_OF_WEEK.map((_, i) => i as Day), duration: 5, cost: 0 }, // East
+  { from: Location.BracadaDesert, to: Location.Celeste, type: TransportType.Walk, days: DAYS_OF_WEEK.map((_, i) => i as Day), duration: 0, cost: 0 },
+  { from: Location.Celeste, to: Location.BracadaDesert, type: TransportType.Walk, days: DAYS_OF_WEEK.map((_, i) => i as Day), duration: 0, cost: 0 },
 
   // Deyja
   { from: Location.Deyja, to: Location.TulareanForest, type: TransportType.Walk, days: DAYS_OF_WEEK.map((_, i) => i as Day), duration: 5, cost: 0 }, // East & North (North is 7, East is 5)
   { from: Location.Deyja, to: Location.Erathia, type: TransportType.Walk, days: DAYS_OF_WEEK.map((_, i) => i as Day), duration: 5, cost: 0 }, // South
+  { from: Location.Deyja, to: Location.ThePit, type: TransportType.Walk, days: DAYS_OF_WEEK.map((_, i) => i as Day), duration: 0, cost: 0 },
+  { from: Location.ThePit, to: Location.Deyja, type: TransportType.Walk, days: DAYS_OF_WEEK.map((_, i) => i as Day), duration: 0, cost: 0 },
 
   // Erathia
   { from: Location.Erathia, to: Location.Deyja, type: TransportType.Walk, days: DAYS_OF_WEEK.map((_, i) => i as Day), duration: 5, cost: 0 }, // North

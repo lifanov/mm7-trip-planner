@@ -13,7 +13,9 @@ export enum Location {
   BarrowDowns = "Barrow Downs",
   StoneCity = "Stone City",
   ThunderfistTunnels = "Thunderfist Tunnels",
-  LandOfTheGiants = "Land of the Giants"
+  LandOfTheGiants = "Land of the Giants",
+  Celeste = "Celeste",
+  ThePit = "The Pit"
 }
 
 export enum Day {
@@ -29,7 +31,8 @@ export enum Day {
 export enum TransportType {
   Coach = "Coach",
   Boat = "Boat",
-  Walk = "Walk"
+  Walk = "Walk",
+  TownPortal = "Town Portal"
 }
 
 export interface Route {
