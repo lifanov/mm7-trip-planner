@@ -1,5 +1,5 @@
 
-import { Location, Day, Route, TravelStep, TripResult } from '../types';
+import { Location, Day, Route, TravelStep, TripResult, TransportType } from '../types';
 import { ROUTES, INN_COSTS } from '../constants';
 
 /**
@@ -25,7 +25,9 @@ export function findShortestPath(
   end: Location,
   startDay: Day,
   hasEvenmornMap: boolean,
-  stayAtInn: boolean
+  stayAtInn: boolean,
+  allowWalking: boolean,
+  teleporterActivated: boolean
 ): TripResult | null {
   if (start === end) {
     return { steps: [], totalDays: 0, totalCost: 0 };
@@ -73,7 +75,9 @@ export function findShortestPath(
     // Explore routes
     const availableRoutes = ROUTES.filter(r => 
       r.from === current.location && 
-      (!r.requiresMap || hasEvenmornMap)
+      (!r.requiresMap || hasEvenmornMap) &&
+      (r.type !== TransportType.Walk || allowWalking) &&
+      (!r.requiresTeleporter || teleporterActivated)
     );
 
     for (const route of availableRoutes) {

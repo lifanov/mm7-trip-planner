@@ -12,7 +12,9 @@ import {
   Search,
   ChevronRight,
   Info,
-  Bed
+  Bed,
+  Footprints,
+  Zap
 } from 'lucide-react';
 import { Location, Day, TripResult, TransportType } from './types';
 import { DAYS_OF_WEEK } from './constants';
@@ -24,12 +26,32 @@ const App: React.FC = () => {
   const [currentDay, setCurrentDay] = useState<Day>(Day.Monday);
   const [hasMap, setHasMap] = useState<boolean>(false);
   const [stayAtInn, setStayAtInn] = useState<boolean>(false);
+  const [walkIfFaster, setWalkIfFaster] = useState<boolean>(false);
+  const [teleporterActivated, setTeleporterActivated] = useState<boolean>(false);
 
   const locations = Object.values(Location);
 
   const result: TripResult | null = useMemo(() => {
-    return findShortestPath(startLoc, targetLoc, currentDay, hasMap, stayAtInn);
-  }, [startLoc, targetLoc, currentDay, hasMap, stayAtInn]);
+    return findShortestPath(startLoc, targetLoc, currentDay, hasMap, stayAtInn, walkIfFaster, teleporterActivated);
+  }, [startLoc, targetLoc, currentDay, hasMap, stayAtInn, walkIfFaster, teleporterActivated]);
+
+  const getTransportIcon = (type: TransportType) => {
+    switch(type) {
+      case TransportType.Coach: return <Bus className="w-3 h-3 text-amber-500" />;
+      case TransportType.Boat: return <Ship className="w-3 h-3 text-amber-500" />;
+      case TransportType.Walk: return <Footprints className="w-3 h-3 text-amber-500" />;
+      default: return <Bus className="w-3 h-3 text-amber-500" />;
+    }
+  };
+
+  const getTransportLabel = (type: TransportType) => {
+    switch(type) {
+      case TransportType.Coach: return 'Stable';
+      case TransportType.Boat: return 'Docks';
+      case TransportType.Walk: return 'Walk';
+      default: return 'Station';
+    }
+  };
 
   return (
     <div className="min-h-screen parchment flex flex-col items-center p-4 md:p-8">
@@ -105,42 +127,82 @@ const App: React.FC = () => {
                 </div>
               </div>
 
-               {/* Stay at Inn Checkbox */}
-               <div className="pt-2">
-                <label className="flex items-center gap-3 cursor-pointer group">
-                  <div className="relative">
-                    <input
-                      type="checkbox"
-                      checked={stayAtInn}
-                      onChange={(e) => setStayAtInn(e.target.checked)}
-                      className="sr-only"
-                    />
-                    <div className={`w-10 h-5 rounded-full transition-colors ${stayAtInn ? 'bg-amber-600' : 'bg-slate-700'}`} />
-                    <div className={`absolute top-1 left-1 w-3 h-3 rounded-full bg-white transition-transform ${stayAtInn ? 'translate-x-5' : ''}`} />
-                  </div>
-                  <span className="text-sm font-bold text-slate-300 group-hover:text-amber-400 flex items-center gap-2">
-                    <Bed className="w-4 h-4" /> Stay at the Inn
-                  </span>
-                </label>
-              </div>
+              <div className="space-y-2 pt-2">
+                 {/* Stay at Inn Checkbox */}
+                 <div>
+                  <label className="flex items-center gap-3 cursor-pointer group">
+                    <div className="relative">
+                      <input
+                        type="checkbox"
+                        checked={stayAtInn}
+                        onChange={(e) => setStayAtInn(e.target.checked)}
+                        className="sr-only"
+                      />
+                      <div className={`w-10 h-5 rounded-full transition-colors ${stayAtInn ? 'bg-amber-600' : 'bg-slate-700'}`} />
+                      <div className={`absolute top-1 left-1 w-3 h-3 rounded-full bg-white transition-transform ${stayAtInn ? 'translate-x-5' : ''}`} />
+                    </div>
+                    <span className="text-sm font-bold text-slate-300 group-hover:text-amber-400 flex items-center gap-2">
+                      <Bed className="w-4 h-4" /> Stay at the Inn
+                    </span>
+                  </label>
+                </div>
 
-              {/* Evenmorn Map Checkbox */}
-              <div className="pt-2">
-                <label className="flex items-center gap-3 cursor-pointer group">
-                  <div className="relative">
-                    <input 
-                      type="checkbox" 
-                      checked={hasMap}
-                      onChange={(e) => setHasMap(e.target.checked)}
-                      className="sr-only"
-                    />
-                    <div className={`w-10 h-5 rounded-full transition-colors ${hasMap ? 'bg-amber-600' : 'bg-slate-700'}`} />
-                    <div className={`absolute top-1 left-1 w-3 h-3 rounded-full bg-white transition-transform ${hasMap ? 'translate-x-5' : ''}`} />
-                  </div>
-                  <span className="text-sm font-bold text-slate-300 group-hover:text-amber-400 flex items-center gap-2">
-                    <MapIcon className="w-4 h-4" /> Has Evenmorn Map
-                  </span>
-                </label>
+                {/* Walk if Faster Checkbox */}
+                <div>
+                  <label className="flex items-center gap-3 cursor-pointer group">
+                    <div className="relative">
+                      <input
+                        type="checkbox"
+                        checked={walkIfFaster}
+                        onChange={(e) => setWalkIfFaster(e.target.checked)}
+                        className="sr-only"
+                      />
+                      <div className={`w-10 h-5 rounded-full transition-colors ${walkIfFaster ? 'bg-amber-600' : 'bg-slate-700'}`} />
+                      <div className={`absolute top-1 left-1 w-3 h-3 rounded-full bg-white transition-transform ${walkIfFaster ? 'translate-x-5' : ''}`} />
+                    </div>
+                    <span className="text-sm font-bold text-slate-300 group-hover:text-amber-400 flex items-center gap-2">
+                      <Footprints className="w-4 h-4" /> Walk if faster
+                    </span>
+                  </label>
+                </div>
+
+                {/* Evenmorn Map Checkbox */}
+                <div>
+                  <label className="flex items-center gap-3 cursor-pointer group">
+                    <div className="relative">
+                      <input
+                        type="checkbox"
+                        checked={hasMap}
+                        onChange={(e) => setHasMap(e.target.checked)}
+                        className="sr-only"
+                      />
+                      <div className={`w-10 h-5 rounded-full transition-colors ${hasMap ? 'bg-amber-600' : 'bg-slate-700'}`} />
+                      <div className={`absolute top-1 left-1 w-3 h-3 rounded-full bg-white transition-transform ${hasMap ? 'translate-x-5' : ''}`} />
+                    </div>
+                    <span className="text-sm font-bold text-slate-300 group-hover:text-amber-400 flex items-center gap-2">
+                      <MapIcon className="w-4 h-4" /> Has Evenmorn Map
+                    </span>
+                  </label>
+                </div>
+
+                 {/* Teleporter Activated Checkbox */}
+                 <div>
+                  <label className="flex items-center gap-3 cursor-pointer group">
+                    <div className="relative">
+                      <input
+                        type="checkbox"
+                        checked={teleporterActivated}
+                        onChange={(e) => setTeleporterActivated(e.target.checked)}
+                        className="sr-only"
+                      />
+                      <div className={`w-10 h-5 rounded-full transition-colors ${teleporterActivated ? 'bg-amber-600' : 'bg-slate-700'}`} />
+                      <div className={`absolute top-1 left-1 w-3 h-3 rounded-full bg-white transition-transform ${teleporterActivated ? 'translate-x-5' : ''}`} />
+                    </div>
+                    <span className="text-sm font-bold text-slate-300 group-hover:text-amber-400 flex items-center gap-2">
+                      <Zap className="w-4 h-4" /> Teleporter Activated
+                    </span>
+                  </label>
+                </div>
               </div>
             </div>
           </div>
@@ -196,7 +258,7 @@ const App: React.FC = () => {
                         
                         {/* Timeline Dot */}
                         <div className="absolute left-0 top-1.5 w-6 h-6 rounded-full bg-slate-800 border-2 border-amber-500 flex items-center justify-center z-10">
-                          {step.type === TransportType.Coach ? <Bus className="w-3 h-3 text-amber-500" /> : <Ship className="w-3 h-3 text-amber-500" />}
+                          {getTransportIcon(step.type)}
                         </div>
 
                         <div className="bg-slate-800/50 border border-slate-700/50 p-4 rounded-lg hover:border-amber-500/30 transition-colors">
@@ -209,7 +271,7 @@ const App: React.FC = () => {
                               </div>
                               <p className="text-sm text-slate-400 flex items-center gap-4">
                                 <span className="flex items-center gap-1">
-                                  {step.type === TransportType.Coach ? 'Stable' : 'Docks'}
+                                  {getTransportLabel(step.type)}
                                 </span>
                                 <span className="flex items-center gap-1">
                                   <Coins className="w-3 h-3" /> {step.cost} Gold
