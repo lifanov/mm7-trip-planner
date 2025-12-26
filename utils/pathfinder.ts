@@ -1,6 +1,6 @@
 
 import { Location, Day, Route, TravelStep, TripResult, TransportType } from '../types';
-import { ROUTES, INN_COSTS } from '../constants';
+import { ROUTES, INN_COSTS, TOWN_PORTAL_LOCATIONS } from '../constants';
 
 /**
  * Calculates the number of days to wait until the next available departure day.
@@ -27,7 +27,8 @@ export function findShortestPath(
   hasEvenmornMap: boolean,
   stayAtInn: boolean,
   allowWalking: boolean,
-  teleporterActivated: boolean
+  teleporterActivated: boolean,
+  townPortalAvailable: boolean
 ): TripResult | null {
   if (start === end) {
     return { steps: [], totalDays: 0, totalCost: 0 };
@@ -79,6 +80,22 @@ export function findShortestPath(
       (r.type !== TransportType.Walk || allowWalking) &&
       (!r.requiresTeleporter || teleporterActivated)
     );
+
+    // Dynamic Town Portal Routes
+    if (townPortalAvailable) {
+      for (const portalTarget of TOWN_PORTAL_LOCATIONS) {
+        if (portalTarget !== current.location) {
+          availableRoutes.push({
+            from: current.location,
+            to: portalTarget,
+            type: TransportType.TownPortal,
+            days: [0, 1, 2, 3, 4, 5, 6] as Day[],
+            duration: 0,
+            cost: 0
+          });
+        }
+      }
+    }
 
     for (const route of availableRoutes) {
       const waitTime = getWaitTime(current.currentDay, route.days);

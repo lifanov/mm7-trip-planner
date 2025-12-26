@@ -28,18 +28,20 @@ const App: React.FC = () => {
   const [stayAtInn, setStayAtInn] = useState<boolean>(false);
   const [walkIfFaster, setWalkIfFaster] = useState<boolean>(false);
   const [teleporterActivated, setTeleporterActivated] = useState<boolean>(false);
+  const [townPortalAvailable, setTownPortalAvailable] = useState<boolean>(false);
 
   const locations = Object.values(Location);
 
   const result: TripResult | null = useMemo(() => {
-    return findShortestPath(startLoc, targetLoc, currentDay, hasMap, stayAtInn, walkIfFaster, teleporterActivated);
-  }, [startLoc, targetLoc, currentDay, hasMap, stayAtInn, walkIfFaster, teleporterActivated]);
+    return findShortestPath(startLoc, targetLoc, currentDay, hasMap, stayAtInn, walkIfFaster, teleporterActivated, townPortalAvailable);
+  }, [startLoc, targetLoc, currentDay, hasMap, stayAtInn, walkIfFaster, teleporterActivated, townPortalAvailable]);
 
   const getTransportIcon = (type: TransportType) => {
     switch(type) {
       case TransportType.Coach: return <Bus className="w-3 h-3 text-amber-500" />;
       case TransportType.Boat: return <Ship className="w-3 h-3 text-amber-500" />;
       case TransportType.Walk: return <Footprints className="w-3 h-3 text-amber-500" />;
+      case TransportType.TownPortal: return <Zap className="w-3 h-3 text-blue-400" />;
       default: return <Bus className="w-3 h-3 text-amber-500" />;
     }
   };
@@ -49,6 +51,7 @@ const App: React.FC = () => {
       case TransportType.Coach: return 'Stable';
       case TransportType.Boat: return 'Docks';
       case TransportType.Walk: return 'Walk';
+      case TransportType.TownPortal: return 'Town Portal';
       default: return 'Station';
     }
   };
@@ -200,6 +203,25 @@ const App: React.FC = () => {
                     </div>
                     <span className="text-sm font-bold text-slate-300 group-hover:text-amber-400 flex items-center gap-2">
                       <Zap className="w-4 h-4" /> Teleporter Activated
+                    </span>
+                  </label>
+                </div>
+
+                {/* Town Portal Available Checkbox */}
+                <div>
+                  <label className="flex items-center gap-3 cursor-pointer group">
+                    <div className="relative">
+                      <input
+                        type="checkbox"
+                        checked={townPortalAvailable}
+                        onChange={(e) => setTownPortalAvailable(e.target.checked)}
+                        className="sr-only"
+                      />
+                      <div className={`w-10 h-5 rounded-full transition-colors ${townPortalAvailable ? 'bg-amber-600' : 'bg-slate-700'}`} />
+                      <div className={`absolute top-1 left-1 w-3 h-3 rounded-full bg-white transition-transform ${townPortalAvailable ? 'translate-x-5' : ''}`} />
+                    </div>
+                    <span className="text-sm font-bold text-slate-300 group-hover:text-amber-400 flex items-center gap-2">
+                      <Zap className="w-4 h-4 text-blue-400" /> Town Portal Available
                     </span>
                   </label>
                 </div>
